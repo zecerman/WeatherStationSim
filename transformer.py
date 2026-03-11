@@ -5,7 +5,6 @@
 import time
 import numpy as np
 import requests
-import sys
 from sampler import Sampler
 
 
@@ -16,8 +15,8 @@ class Transformer:
     '''
 
     def __init__(self):
-        # Use command line arguments to determine sampling rate
-        self.timeout = int(sys.argv[1])
+        # TODO: use better and cascading logic for sampling rate, it is currently hard coded
+        self.timeout = 5
         # TODO 2 samplers per transformer is currently hard coded, 
         # could easily be changed to a dynamic number
         self.sampler_list = []

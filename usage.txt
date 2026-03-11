@@ -4,5 +4,5 @@ Have all files in the same directory including the following db file and headers
     timestamp,voltage,temperature,precipitation
 Initialize the flask server with
     python rest_api.py
-Run the transformer including an argument indicating sampling timeout (such as 5 seconds) with
-    python transformer.py 5
+Run the transformer with:
+    python transformer.py
