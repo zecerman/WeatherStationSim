@@ -30,7 +30,7 @@ jobs:
 # Run the entire project for X seconds, || [ $? -eq 124 ] is included ST when the time expires github actions wont see it as a failure
       - name: Run transformer check
         run: |
-          timeout 3s python transformer.py || [ $? -eq 124 ]
+          timeout 9s python transformer.py || [ $? -eq 124 ]
 # Print status of pipeline health to the terminal, 
 #this basically tells us if our project ran from head to toe without fault
       - name: Report success
