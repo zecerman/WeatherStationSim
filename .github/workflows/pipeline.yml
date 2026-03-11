@@ -21,7 +21,7 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install -r requirements.txt
+          pip install numpy requests flask
 # Syntactic sugar section, required for function but nonspecific to this project ^
 # Compile all files except rest_api.py
       - name: Build check
