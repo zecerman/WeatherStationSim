@@ -21,7 +21,7 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+          pip install -r requirements.txt
 # Syntactic sugar section, required for function but nonspecific to this project ^
 # Compile all files except rest_api.py
       - name: Build check
