@@ -5,30 +5,25 @@
 import time
 from datetime import datetime
 from sensor import Sensor
+import requests  
 
+NODE_URL = "http://localhost:3000/sample"  # Node sampler endpoint
 
 class Sampler:
     '''
     Samples voltage readings from the Sensor and attaches timestamps.
     '''
-
-    def __init__(self):
-        self.sensor_list = []
-        # TODO 10 sensors per sampler is currently hard coded, 
-        # could easily be changed to a dynamic number
-        for _ in range(10):
-            self.sensor_list.append(Sensor())
+    def __init__(self, num_sensors=10):
+        self.sensor_list = [Sensor() for _ in range(num_sensors)]
 
     def sample(self):
         '''
         Take a sample from each sensor and return structured data.
         '''
         # Note: This is the ideal way to send the timestamp in a JSON serializable way
-        timestamp = datetime.now().timestamp()
+        timestamp = int(datetime.now().timestamp())
         # Each sensor in the sampling unit will take a voltage reading
-        voltage_list = []
-        for sensor in self.sensor_list:
-            voltage_list.append(sensor.read_voltage())
+        voltage_list = [sensor.read_voltage() for sensor in self.sensor_list]
 
         # Many valid solutions for passing this data along, dictionary is fine
         sample_data = {
@@ -37,10 +32,19 @@ class Sampler:
         }
         return sample_data
 
+def send_to_node(data):
+    '''
+    Send sample data to Node.js sampler automatically
+    '''
+    try:
+        requests.post(NODE_URL, json=data)
+    except Exception as e:
+        print(f"Failed to send data to Node: {e}")
 
 if __name__ == '__main__':
-    sampler = Sampler()
+    sampler = Sampler(num_sensors=10) 
     while True:
-        sample = sampler.sample()
-        print(sample)
-        time.sleep(2)
+        sample_data = sampler.sample()
+        print(sample_data)
+        send_to_node(sample_data)  # Send automatically
+        time.sleep(2)  # Match your sampling interval

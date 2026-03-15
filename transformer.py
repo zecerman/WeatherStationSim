@@ -2,6 +2,7 @@
 # There is only one transformer per weather station,
 # it is the central routing point for all data created by its sampler arrays.
 
+import json
 import time
 import numpy as np
 import requests
@@ -14,16 +15,34 @@ class Transformer:
     and sends them to the database through a REST API.
     '''
 
-    def __init__(self):
-        # TODO: use better and cascading logic for sampling rate, it is currently hard coded
-        self.timeout = 5
-        # TODO 2 samplers per transformer is currently hard coded, 
-        # could easily be changed to a dynamic number
+
+    def __init__(self, config_path='config.json'):
+        config = self.load_config(config_path)
+        transformer_config = config.get('transformer', {})
+
+        # Runtime configuration loaded from JSON
+        self.timeout = transformer_config.get('timeout')
+        sampler_count = transformer_config.get('sampler_count')
+        self.api_url = transformer_config.get('api_url')
+
+        # Create samplers dynamically per config file
         self.sampler_list = []
-        for _ in range(2):
+        for _ in range(sampler_count):
             self.sampler_list.append(Sampler())
-        # Port for REST_API is arbitrary, hard coding it is fine
-        self.api_url = 'http://127.0.0.1:5000/weather'
+
+    def load_config(self, config_path):
+        '''
+        Helper used in the first line of __init__ to load configuration from a JSON file.
+        '''
+        try:
+            with open(config_path, 'r') as f:
+                return json.load(f)
+        except FileNotFoundError:
+            print(f'Config file not found: {config_path}. Using defaults.')
+            return {}
+        except json.JSONDecodeError:
+            print(f'Invalid JSON in config file: {config_path}. Using defaults.')
+            return {}
 
     def voltage_to_temperature(self, voltage):
         convert_to_fahrenheit = 2
@@ -58,8 +77,8 @@ class Transformer:
             # Extract the average voltage from each sensor array which responded
             avg_ls = []
             for sample in samples:
-                avg_ls = np.average(sample['voltage'])
-            voltage = np.average(avg_ls)
+                avg_ls.append(np.average(sample['voltage']))
+            voltage = round(np.average(avg_ls), 2)
             # Make some calculations with this value
             t = self.voltage_to_temperature(voltage)
             p = self.voltage_to_precipitation(voltage)

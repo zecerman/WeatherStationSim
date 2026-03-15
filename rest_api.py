@@ -25,14 +25,15 @@ def write_weather_data():
     # Else, append data as row
     with open(DATABASE_FILE_PATH, 'a', newline='') as f:
         w = csv.writer(f)
-        w.writerow([
+        row = [
             data['timestamp'],
             data['voltage'],
             data['temperature'],
             data['precipitation']
-        ])
+        ]
+        w.writerow(row)
     # Communicate success via terminal
-    return jsonify({'message': 'Weather data stored successfully'}), 201
+    return jsonify({'data': row}), 201
 
 if __name__ == '__main__':
     initialize_database()
