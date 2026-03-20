@@ -2,21 +2,11 @@
 This repo is designed to simulate a weather station, it is primariy an exercise in software engineering, CI/CD pipelines, and API communication 
 
 
-    To run the program you must:
-Have all files in the same directory including the following db file and headers
-    database.csv
-    timestamp,voltage,temperature,precipitation
-Initialize the flask server with
-    python rest_api.py
-Run the transformer with:
-    python transformer.py
-
-
-
-
-
-
-
+## To run the program you must:
+1. Initialize the flask server with
+  python rest_api.py
+2. Run the weather station with:
+  python run.py
 
 
 

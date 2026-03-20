@@ -13,7 +13,8 @@ def initialize_database():
     if not os.path.exists(DATABASE_FILE_PATH):
         with open(DATABASE_FILE_PATH, 'w', newline='') as f:
             w = csv.writer(f)
-            w.writerow(['timestamp', 'voltage', 'temperature', 'precipitation'])
+            # If no db file existed, write header row as its first entry
+            w.writerow(['timestamp', 'voltage', 'temperature'])
 
 # Flask hook
 @app.route('/weather', methods=['POST'])
@@ -28,8 +29,7 @@ def write_weather_data():
         row = [
             data['timestamp'],
             data['voltage'],
-            data['temperature'],
-            data['precipitation']
+            data['temperature']
         ]
         w.writerow(row)
     # Communicate success via terminal

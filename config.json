@@ -1,7 +1,8 @@
 {
-  "transformer": {
+  "station": {
     "timeout": 5,
-    "sampler_count": 3,
-    "api_url": "http://127.0.0.1:5000/weather"
+    "api_url": "http://127.0.0.1:5000/weather",
+    "count": 3,
+    "sensors_per_sampler": 10
   }
 }
