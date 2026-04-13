@@ -2,10 +2,34 @@
 This repo is designed to simulate a weather station, it is primariy an exercise in software engineering, CI/CD pipelines, and API communication 
 
 ## Usage instructions
-1. Initialize the flask server with
-  python rest_api.py
-2. Run the weather station with:
-  python run.py
+
+FIRST TERMINAL 
+docker-compose up -d                  (starts the database)
+
+python rest_api.py                            (starts the pipeline)
+-----------------------------------------------------------------
+
+SECOND TERMINAL (AFTER FIRST DONE)
+
+1:
+
+curl -X POST http://127.0.0.1:5000/weather \
+-H "Content-Type: application/json" \
+-d '{"timestamp": 1234567890, "voltage": 120, "temperature": 60}'
+
+(above to test connection to the database should return the below)
+
+{
+  "status": "stored",
+  "id": 1
+}
+
+2: python run.py  (runs full pipeline)
+
+3: docker exec -it weather-db psql -U weatheruser -d weatherdb
+
+should output a table to show it is getting correct contents from database. 
+
 
 ## REST API Design
 ### Endpoint definition
